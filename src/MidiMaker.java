@@ -1,19 +1,24 @@
 import javax.sound.midi.*;
 import java.io.File;
 
-public class Main
+public class MidiMaker
 {
-    public static final String[] NOTE_NAMES = {"C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"};
+    public static final String[] NOTE_NAMES =
+            {
+                    "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+            };
 
-    public static void main (String[] args) throws Exception
+    private final SplitterConfig cfg;
+
+    public MidiMaker (SplitterConfig config)
     {
-        Sequence sequence = MidiSystem.getSequence(
-                new File("C:\\Users\\Administrator\\Desktop\\audio software\\midifiles\\main-theme.mid"));
+        cfg = config;
+    }
 
-        Sequence newSeq = new Sequence(sequence.getDivisionType(), sequence.getResolution());
-        Track newTr = newSeq.createTrack();
-
-        int channelF = 10; // Drums
+    public void perform () throws Exception
+    {
+        Sequence sequence = MidiSystem.getSequence(new File(cfg.inputFile));
+        Splitter splitter = new Splitter(sequence, cfg);
 
         int trackNumber = 0;
         for (Track track : sequence.getTracks())
@@ -29,7 +34,7 @@ public class Main
                 if (message instanceof ShortMessage)
                 {
                     ShortMessage sm = (ShortMessage) message;
-                    int channel = sm.getChannel()+1;
+                    int channel = sm.getChannel() + 1;
                     int cmd = sm.getCommand();
                     int velocity = sm.getData2();
                     int key = sm.getData1();
@@ -39,15 +44,13 @@ public class Main
                     System.out.print("Channel: " + channel + " ");
                     if (cmd == ShortMessage.NOTE_ON && velocity > 0)
                     {
-                        if (channel == channelF)
-                            newTr.add(event);
+                        splitter.insert(event, channel);
                         System.out.println("Note on, " + noteName + octave + " key=" + key + " velocity: " + velocity);
                     }
                     else if (cmd == ShortMessage.NOTE_OFF || (cmd == ShortMessage.NOTE_ON && velocity == 0))
                     {
-                        if (channel == channelF)
-                            newTr.add(event);
-                        System.out.println("Note off, " + noteName + octave + " key=" + key );
+                        splitter.insert(event, channel);
+                        System.out.println("Note off, " + noteName + octave + " key=" + key);
                     }
                     else
                     {
@@ -58,9 +61,9 @@ public class Main
                 {
                     if (message instanceof MetaMessage)
                     {
-                        MetaMessage mm = (MetaMessage)message;
+                        MetaMessage mm = (MetaMessage) message;
                         String ms = new String(mm.getData());
-                        System.out.println("MetaMsg: "+ms);
+                        System.out.println("MetaMsg: " + ms);
                     }
                     else
                     {
@@ -68,11 +71,8 @@ public class Main
                     }
                 }
             }
-
             System.out.println();
         }
-        File f = new File("C:\\midifile.mid");
-        MidiSystem.write(newSeq,1,f);
-
+        splitter.save(cfg.outputDir);
     }
 }
