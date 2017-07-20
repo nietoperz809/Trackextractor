@@ -3,7 +3,7 @@ import java.io.File;
 
 public class MidiMaker
 {
-    public static final String[] NOTE_NAMES =
+    private static final String[] NOTE_NAMES =
             {
                     "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
             };

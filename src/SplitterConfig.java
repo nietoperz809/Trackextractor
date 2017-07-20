@@ -1,12 +1,12 @@
 
 public class SplitterConfig
 {
-    boolean rebase;
-    boolean doubleSpeed;
-    int transpose;
-    boolean onlyDrums;
-    String inputFile;
-    String outputDir;
+    final boolean rebase;
+    final boolean doubleSpeed;
+    final int transpose;
+    final boolean onlyDrums;
+    final String inputFile;
+    final String outputDir;
 
     public SplitterConfig (boolean rebase, boolean doubleSpeed,
                            int transposeValue, boolean onlyDrums,

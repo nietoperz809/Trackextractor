@@ -205,7 +205,7 @@ public class GUI extends javax.swing.JDialog
                 (
                         rebaseCheck.isSelected(),
                         doubleSpeedCheck.isSelected(),
-                        Integer.parseInt(transposeText.getText()),
+                        Integer.parseInt(transposeText.getText().trim()),
                         onlyDrums.isSelected(),
                         inputFilePath.getText(),
                         outputDir.getText()
