@@ -63,6 +63,10 @@ public class Splitter
                 makeDoubleSpeed(sequence);
             if (cfg.transpose != 0)
                 transposeTrack(sequence);
+            if (cfg.chord)
+                makeChord(sequence, true);
+            else if (cfg.dur)
+                makeChord(sequence, false); 
             tracknum++;
             File f = new File(directory + "\\miditrack" + tracknum
                     + "-" + System.currentTimeMillis() + "-.mid");
@@ -120,6 +124,45 @@ public class Splitter
                 ShortMessage sm = (ShortMessage)msg;
                 sm.setMessage(sm.getStatus(),sm.getChannel(),
                         sm.getData1()+val, sm.getData2());
+            }
+        }
+    }
+
+    private void makeChord (Sequence s, boolean moll) throws Exception
+    {
+        Track t = s.getTracks()[0];
+        Track t1 = s.createTrack();
+        s.deleteTrack(t);
+        for (int i = 0; i < t.size(); i++)
+        {
+            MidiEvent me = t.get(i);
+            MidiMessage msg = me.getMessage();
+            if (msg instanceof ShortMessage)
+            {
+                ShortMessage sm = (ShortMessage)msg;
+                long tick = me.getTick();
+                int st1 = sm.getStatus();
+                int chan = sm.getChannel();
+                int dat2 = sm.getData2();
+                int d2 = sm.getData1()+3;
+                int d3 = d2+3;
+                ShortMessage msgd2 = (ShortMessage) sm.clone();
+                ShortMessage msgd3 = (ShortMessage) sm.clone();
+                if (moll)
+                {
+                    msgd2.setMessage(st1, chan, sm.getData1() + 3, dat2);
+                    msgd3.setMessage(st1, chan, sm.getData1() + 7, dat2);
+                }
+                else
+                {
+                    msgd2.setMessage(st1, chan, sm.getData1() + 4, dat2);
+                    msgd3.setMessage(st1, chan, sm.getData1() + 7, dat2);
+                }
+                MidiEvent m2 = new MidiEvent(msgd2, tick);
+                MidiEvent m3 = new MidiEvent(msgd3, tick);
+                t1.add(me);
+                t1.add(m2);
+                t1.add(m3);
             }
         }
     }
