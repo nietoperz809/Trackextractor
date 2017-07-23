@@ -15,7 +15,6 @@ import java.io.File;
  */
 public class GUI extends javax.swing.JDialog
 {
-
     /**
      * Creates new form GUI
      */
@@ -43,7 +42,6 @@ public class GUI extends javax.swing.JDialog
         outputDir = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
         rebaseCheck = new javax.swing.JCheckBox();
-        doubleSpeedCheck = new javax.swing.JCheckBox();
         jLabel1 = new javax.swing.JLabel();
         transposeText = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
@@ -52,6 +50,11 @@ public class GUI extends javax.swing.JDialog
         chordDurCheck = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
         outputField = new javax.swing.JTextArea();
+        jLabel3 = new javax.swing.JLabel();
+        speedFactorText = new javax.swing.JTextField();
+        notesOnlyCheck = new javax.swing.JCheckBox();
+        jButtonReverseNotes = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(0, 204, 204));
@@ -92,11 +95,9 @@ public class GUI extends javax.swing.JDialog
             rebaseCheck.setSelected(true);
             rebaseCheck.setText("Rebase");
 
-            doubleSpeedCheck.setText("DoubleSpeed");
-
             jLabel1.setText("Tranpose");
 
-            transposeText.setText("0       ");
+            transposeText.setText("0");
 
             jLabel2.setText("Octaves");
 
@@ -127,6 +128,31 @@ public class GUI extends javax.swing.JDialog
             outputField.setWrapStyleWord(true);
             jScrollPane1.setViewportView(outputField);
 
+            jLabel3.setText("SpeedFactor");
+
+            speedFactorText.setText("1.0");
+
+            notesOnlyCheck.setSelected(true);
+            notesOnlyCheck.setText("Notes Only");
+
+            jButtonReverseNotes.setText("Rev Track");
+            jButtonReverseNotes.addActionListener(new java.awt.event.ActionListener()
+            {
+                public void actionPerformed(java.awt.event.ActionEvent evt)
+                {
+                    jButtonReverseNotesActionPerformed(evt);
+                }
+            });
+
+            jButton4.setText("Rev Octave");
+            jButton4.addActionListener(new java.awt.event.ActionListener()
+            {
+                public void actionPerformed(java.awt.event.ActionEvent evt)
+                {
+                    jButton4ActionPerformed(evt);
+                }
+            });
+
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
             layout.setHorizontalGroup(
@@ -139,30 +165,39 @@ public class GUI extends javax.swing.JDialog
                         .addComponent(jSeparator1)
                         .addComponent(outputDir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createSequentialGroup()
-                            .addComponent(jButton1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jButton2)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jButton1)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jButton2))
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(onlyDrums)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(chordCheck)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(chordDurCheck))
+                                    .addComponent(chordCheck)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(rebaseCheck)
-                                    .addGap(29, 29, 29)
-                                    .addComponent(doubleSpeedCheck)
-                                    .addGap(18, 18, 18)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jLabel3)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(speedFactorText, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jLabel1)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(transposeText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(transposeText, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel2)))
-                            .addGap(0, 141, Short.MAX_VALUE))
+                                    .addComponent(jLabel2))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(chordDurCheck)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(notesOnlyCheck)))
+                            .addGap(0, 147, Short.MAX_VALUE))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                            .addGap(0, 0, Short.MAX_VALUE)
+                            .addComponent(jButtonReverseNotes)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton4)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton3)))
                     .addContainerGap())
             );
@@ -174,15 +209,17 @@ public class GUI extends javax.swing.JDialog
                         .addComponent(jButton1)
                         .addComponent(jButton2)
                         .addComponent(rebaseCheck)
-                        .addComponent(doubleSpeedCheck)
                         .addComponent(jLabel1)
                         .addComponent(transposeText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel2))
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel3)
+                        .addComponent(speedFactorText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(onlyDrums)
                         .addComponent(chordCheck)
-                        .addComponent(chordDurCheck))
+                        .addComponent(chordDurCheck)
+                        .addComponent(notesOnlyCheck))
                     .addGap(26, 26, 26)
                     .addComponent(inputFilePath)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -192,7 +229,10 @@ public class GUI extends javax.swing.JDialog
                     .addGap(18, 18, 18)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jButton3)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton3)
+                        .addComponent(jButtonReverseNotes)
+                        .addComponent(jButton4))
                     .addContainerGap())
             );
 
@@ -251,7 +291,7 @@ public class GUI extends javax.swing.JDialog
         SplitterConfig cfg = new SplitterConfig
                 (
                         rebaseCheck.isSelected(),
-                        doubleSpeedCheck.isSelected(),
+                        Double.parseDouble(speedFactorText.getText().trim()),
                         Integer.parseInt(transposeText.getText().trim()),
                         onlyDrums.isSelected(),
                         inputFilePath.getText(),
@@ -262,7 +302,7 @@ public class GUI extends javax.swing.JDialog
         MidiMaker mid = new MidiMaker(cfg);
         try
         {
-            mid.perform();
+            mid.perform(notesOnlyCheck.isSelected());
         }
         catch (Exception ex)
         {
@@ -279,6 +319,30 @@ public class GUI extends javax.swing.JDialog
     {//GEN-HEADEREND:event_chordDurCheckActionPerformed
         chordCheck.setSelected(false);
     }//GEN-LAST:event_chordDurCheckActionPerformed
+
+    private void jButtonReverseNotesActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButtonReverseNotesActionPerformed
+    {//GEN-HEADEREND:event_jButtonReverseNotesActionPerformed
+        try
+        {
+            new NoteReverser (inputFilePath.getText(),outputDir.getText(), NoteReverser.Modus.REV_TRACK);
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_jButtonReverseNotesActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton4ActionPerformed
+    {//GEN-HEADEREND:event_jButton4ActionPerformed
+        try
+        {
+            new NoteReverser (inputFilePath.getText(),outputDir.getText(), NoteReverser.Modus.REV_OCTAVE);
+        }
+        catch (Exception e)
+        {
+            System.out.println(e);
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -338,19 +402,23 @@ public class GUI extends javax.swing.JDialog
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox chordCheck;
     private javax.swing.JCheckBox chordDurCheck;
-    private javax.swing.JCheckBox doubleSpeedCheck;
     private javax.swing.JLabel inputFilePath;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButtonReverseNotes;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JCheckBox notesOnlyCheck;
     private javax.swing.JCheckBox onlyDrums;
     private javax.swing.JLabel outputDir;
     private javax.swing.JTextArea outputField;
     private javax.swing.JCheckBox rebaseCheck;
+    private javax.swing.JTextField speedFactorText;
     private javax.swing.JTextField transposeText;
     // End of variables declaration//GEN-END:variables
 }

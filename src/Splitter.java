@@ -59,8 +59,8 @@ public class Splitter
         {
             if (cfg.rebase)
                 adjustTimebase(sequence);
-            if (cfg.doubleSpeed)
-                makeDoubleSpeed(sequence);
+            if (cfg.speedFactor != 1.0)
+                changeSpeed(sequence);
             if (cfg.transpose != 0)
                 transposeTrack(sequence);
             if (cfg.chord)
@@ -78,14 +78,14 @@ public class Splitter
      * Makes a track twice as fast
      * @param s Sequence that has the track
      */
-    private void makeDoubleSpeed(Sequence s)
+    private void changeSpeed(Sequence s)
     {
         Track t = s.getTracks()[0];
         for (int i = 0; i < t.size(); i++)
         {
             MidiEvent me = t.get(i);
-            long tick = me.getTick();
-            me.setTick(tick/2);
+            double tick = me.getTick();
+            me.setTick((long)(tick/cfg.speedFactor));
         }
     }
 

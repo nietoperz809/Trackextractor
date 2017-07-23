@@ -15,7 +15,7 @@ public class MidiMaker
         cfg = config;
     }
 
-    public void perform () throws Exception
+    public void perform (boolean notes_only) throws Exception
     {
         Sequence sequence = MidiSystem.getSequence(new File(cfg.inputFile));
         Splitter splitter = new Splitter(sequence, cfg);
@@ -42,7 +42,22 @@ public class MidiMaker
                     int note = key % 12;
                     String noteName = NOTE_NAMES[note];
                     System.out.print("Channel: " + channel + " ");
-                    if (cmd == ShortMessage.NOTE_ON && velocity > 0)
+                    if (!notes_only && cmd == ShortMessage.POLY_PRESSURE)
+                    {
+                        splitter.insert(event, channel);
+                        System.out.println("poly pressure");
+                    }
+                    else if (!notes_only && cmd == ShortMessage.CHANNEL_PRESSURE)
+                    {
+                        splitter.insert(event, channel);
+                        System.out.println("pitch bend");
+                    }
+                    else if (!notes_only && cmd == ShortMessage.PITCH_BEND)
+                    {
+                        splitter.insert(event, channel);
+                        System.out.println("pitch bend");
+                    }
+                    else if (cmd == ShortMessage.NOTE_ON && velocity > 0)
                     {
                         splitter.insert(event, channel);
                         System.out.println("Note on, " + noteName + octave + " key=" + key + " velocity: " + velocity);
